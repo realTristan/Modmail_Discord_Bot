@@ -13,7 +13,7 @@ bot = commands.Bot(command_prefix = "!", intents = intents)
 
 @bot.event
 async def on_ready():
-	print(f"Launched {bot.user.name}")
+	print(f" [!] Launched {bot.user.name}")
 
 
 
@@ -26,12 +26,19 @@ async def on_message(message):
     if message.content.startswith('!close'):
         if message.author.guild_permissions.manage_channels:
             if message.channel.category.name == 'modmail':
+                if message.content[8:] == '' or message.content[8:] == ' ':
+                    close_reason = "None Given"
+                else:
+                    close_reason = message.content[7:]
+
+
                 topic = message.channel.topic
                 if topic:
                     member = message.guild.get_member(int(topic))
                     if member:
-                        embed = discord.Embed(description = 'ModMail Ticket Closed', color=16711758)
-                        embed.set_author(name = message.author, icon_url = message.author.avatar_url)
+                        embed = discord.Embed(title='ModMail Ticket Closed',description = f'`Reason: {close_reason}`', color=16711758)
+                        embed.set_footer(icon_url= f'{message.author.avatar_url}', text=f'{message.author.name}')
+                        embed.timestamp = datetime.datetime.utcnow()
                         await member.send(embed = embed)
                         
                 await message.channel.delete(reason=message.content[7:])
@@ -57,7 +64,7 @@ async def on_message(message):
         return
 
     if isinstance(message.channel, discord.DMChannel):
-        guild = bot.get_guild(ENTER YOUR GUILD ID) # <===== DO NOT USE ('GUILD ID') use (GUILD ID)
+        guild = bot.get_guild(YOUR GUILD ID) # <==== USE (guild id) not ("guild id")
         categ = utils.get(guild.categories, name = "modmail")
         if not categ:
             overwrites = {
@@ -70,11 +77,12 @@ async def on_message(message):
 
         if not channel:
             channel = await categ.create_text_channel(name = f"{message.author.name}#{message.author.discriminator}", topic = str(message.author.id))
-            await channel.send("@here // Type a Hidden Message by using !(message)")
+            await channel.send("@here **//** `Type a Hidden Message by using !(message)`")
             
 
         embed3 = discord.Embed(description = message.content, color=16711758)
         embed3.set_author(name = message.author, icon_url = message.author.avatar_url)
+        embed3.timestamp = datetime.datetime.utcnow()
         await channel.send(embed = embed3)
 
     elif isinstance(message.channel, discord.TextChannel):
@@ -87,6 +95,7 @@ async def on_message(message):
                 if member:
                     embed4 = discord.Embed(description = message.content, color=16711758)
                     embed4.set_author(name = message.author, icon_url = message.author.avatar_url)
+                    embed4.timestamp = datetime.datetime.utcnow()
                     await member.send(embed = embed4)
     
 
