@@ -23,6 +23,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
+    await bot.process_commands(message)
     if message.content.startswith('!close'):
         if message.author.guild_permissions.manage_channels:
             if message.channel.category.name == 'modmail':
@@ -100,7 +101,15 @@ async def on_message(message):
     
 
 
+@bot.command()
+async def add(ctx, *args):
+    format_args = list(args)
 
+    user1 = format_args[0].strip('>').replace('<@!','')
+    user2 = ctx.guild.get_member(int(user1))
+
+    await ctx.channel.set_permissions(user2, view_channel=True, send_messages=True)
+    await ctx.send(f'Added {user2.mention} to the ticket!')
 
 
 
