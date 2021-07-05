@@ -57,7 +57,7 @@ async def on_message(message):
         return
 
     if isinstance(message.channel, discord.DMChannel):
-        guild = bot.get_guild(782315340205391893)
+        guild = bot.get_guild(ENTER YOUR GUILD ID) # <===== DO NOT USE ('GUILD ID') use (GUILD ID)
         categ = utils.get(guild.categories, name = "modmail")
         if not categ:
             overwrites = {
