@@ -13,7 +13,8 @@ bot = commands.Bot(command_prefix = "!", intents = intents)
 
 @bot.event
 async def on_ready():
-	print(f" [!] Launched {bot.user.name}")
+    await bot.change_presence(activity=discord.Game(name="DM for Support"))
+    print(f" [!] Launched {bot.user}")
 
 
 
@@ -24,6 +25,7 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
+
     if message.content.startswith('!close'):
         if message.author.guild_permissions.manage_channels:
             if message.channel.category.name == 'modmail':
@@ -38,7 +40,7 @@ async def on_message(message):
                     member = message.guild.get_member(int(topic))
                     if member:
                         embed = discord.Embed(title='ModMail Ticket Closed',description = f'`Reason: {close_reason}`', color=16711758)
-                        embed.set_footer(icon_url= f'{message.author.avatar_url}', text=f'{message.author.name}')
+                        embed.set_footer(icon_url= f'{message.author.avatar_url}', text=f'{message.author}')
                         embed.timestamp = datetime.datetime.utcnow()
                         await member.send(embed = embed)
                         
@@ -47,7 +49,7 @@ async def on_message(message):
 
             else:
                 await message.delete()
-                embed1 = discord.Embed(title='Wrong Channel!', description = 'Please use this command in the ModMail Category!', color=16711758)
+                embed1 = discord.Embed(title='Wrong Channel!', description = '`Please use this Command in the ModMail Category!`', color=16711758)
                 embed1.set_footer(icon_url= f'{message.author.avatar_url}', text=f'{message.author.name}')
                 embed1.timestamp = datetime.datetime.utcnow()
                 await message.channel.send(embed=embed1, delete_after=3)
@@ -65,7 +67,7 @@ async def on_message(message):
         return
 
     if isinstance(message.channel, discord.DMChannel):
-        guild = bot.get_guild(YOUR GUILD ID) # <==== USE (guild id) not ("guild id")
+        guild = bot.get_guild(YOUR GUILD ID)
         categ = utils.get(guild.categories, name = "modmail")
         if not categ:
             overwrites = {
@@ -101,15 +103,57 @@ async def on_message(message):
     
 
 
+
 @bot.command()
+@commands.has_permissions(manage_channels=True)
 async def add(ctx, *args):
+    await ctx.message.delete()
     format_args = list(args)
 
-    user1 = format_args[0].strip('>').replace('<@!','')
+    user1 = format_args[0].strip('>').strip('<').strip('@').replace('!','')
     user2 = ctx.guild.get_member(int(user1))
 
     await ctx.channel.set_permissions(user2, view_channel=True, send_messages=True)
-    await ctx.send(f'Added {user2.mention} to the ticket!')
+    await ctx.send(f'{ctx.author.mention} added {user2.mention} to the ticket!')
+    topic = ctx.channel.topic
+    if topic:
+        member = ctx.guild.get_member(int(topic))
+        if member:
+            embed = discord.Embed(title='Added User to Ticket',description = f'{ctx.author.mention} added {user2.mention} to the ticket!', color=16711758)
+            embed.set_footer(icon_url= f'{ctx.author.avatar_url}', text=f'{ctx.author}')
+            embed.timestamp = datetime.datetime.utcnow()
+            await member.send(embed = embed)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
