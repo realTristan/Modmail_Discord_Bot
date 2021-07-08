@@ -131,7 +131,7 @@ async def on_message(message):
 
             if not channel:
                 channel = await categ.create_text_channel(name = f"{message.author}", topic = str(message.author.id))
-                await channel.send("@here **//** `Type a Hidden Message by using !(message)`")
+                await channel.send("||@here||\n**//** `Type a Hidden Message by using !(message)`\n**//** `Add Users to the Ticket by using !add (@user)`\n**//** `Remove Users from the Ticket by using !remove (@user)`\n**//** `Close the Ticket by using !close (reason)`")
             
 
             log_chan = utils.get(categ.channels, name = "modmail_logs")
@@ -252,6 +252,45 @@ async def add(ctx, *args):
 
 
 
+# remove people from the ticket
+@bot.command()
+@commands.has_permissions(manage_channels=True)
+async def remove(ctx, *args):
+    await ctx.message.delete()
+    guild = ctx.message.guild
+    categ = utils.get(guild.categories, name = "modmail")
+    log_chan = utils.get(categ.channels, name = "modmail_logs")
+
+
+    format_args = list(args)
+
+    user1 = format_args[0].strip('>').strip('<').strip('@').replace('!','')
+    user2 = ctx.guild.get_member(int(user1))
+
+    await ctx.channel.set_permissions(user2, view_channel=False, send_messages=False)
+    await ctx.send(f'{ctx.author.mention} removed {user2.mention} from the ticket!')
+    topic = ctx.channel.topic
+    if topic:
+        member = ctx.guild.get_member(int(topic))
+        if member:
+            embed = discord.Embed(title='Removed User from Ticket',description = f'{ctx.author.mention} removed {user2.mention} from the ticket!', color=65535)
+            embed.set_footer(icon_url= f'{ctx.author.avatar_url}', text=f'{ctx.author}')
+            embed.timestamp = datetime.datetime.utcnow()
+            await member.send(embed = embed)
+
+
+            embed22 = discord.Embed(title=f'Removed User from Ticket: #{ctx.channel.name}',description = f'{ctx.author.mention} removed {user2.mention} from the ticket!', color=65535)
+            embed22.set_footer(icon_url= f'{ctx.author.avatar_url}', text=f'{ctx.author}')
+            embed22.timestamp = datetime.datetime.utcnow()
+            await log_chan.send(embed = embed22)
+
+
+
+
+
+
+
+
 #close the ticket channel / delete the ticket channel
 @bot.command()
 @commands.has_permissions(manage_channels=True)
@@ -305,6 +344,10 @@ async def close(ctx, *args):
         embed2.set_footer(icon_url= f'{ctx.author.avatar_url}', text=f'{ctx.author.name}')
         embed2.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=embed2, delete_after=2)
+
+
+
+
 
 bot.run('BOT TOKEN')
 
