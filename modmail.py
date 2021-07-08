@@ -80,7 +80,7 @@ async def on_message(message):
 
 
 
-        embed_select= discord.Embed(title='Select Server to send message to')
+        embed_select= discord.Embed(title='Select Server to Send Message', color=65535)
 
 
         for guild_check in bot.guilds:
@@ -117,13 +117,13 @@ async def on_message(message):
             files = message.attachments
 
             for file in files:
-                embed33 = discord.Embed(title='Message Recieved', description=message.content, color=16711758)
+                embed33 = discord.Embed(title='Message Recieved', description=message.content, color=65535)
                 embed33.set_thumbnail(url=file.url)
                 embed33.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
                 embed33.timestamp = datetime.datetime.utcnow()
                 await channel.send(embed=embed33)
         else:
-            embed3 = discord.Embed(title='Message Recieved',description = message.content, color=16711758)
+            embed3 = discord.Embed(title='Message Recieved',description = message.content, color=65535)
             embed3.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
             embed3.timestamp = datetime.datetime.utcnow()
             await channel.send(embed = embed3)
@@ -140,13 +140,13 @@ async def on_message(message):
                         files = message.attachments
 
                         for file in files:
-                            embed44 = discord.Embed(title='Message Recieved', description=message.content, color=16711758)
+                            embed44 = discord.Embed(title='Message Recieved', description=message.content, color=65535)
                             embed44.set_thumbnail(url=file.url)
                             embed44.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
                             embed44.timestamp = datetime.datetime.utcnow()
                             await member.send(embed=embed44)
                     else:
-                        embed4 = discord.Embed(title='Message Recieved',description = message.content, color=16711758)
+                        embed4 = discord.Embed(title='Message Recieved',description = message.content, color=65535)
                         embed4.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
                         embed4.timestamp = datetime.datetime.utcnow()
                         await member.send(embed = embed4)
@@ -170,7 +170,7 @@ async def add(ctx, *args):
     if topic:
         member = ctx.guild.get_member(int(topic))
         if member:
-            embed = discord.Embed(title='Added User to Ticket',description = f'{ctx.author.mention} added {user2.mention} to the ticket!', color=16711758)
+            embed = discord.Embed(title='Added User to Ticket',description = f'{ctx.author.mention} added {user2.mention} to the ticket!', color=65535)
             embed.set_footer(icon_url= f'{ctx.author.avatar_url}', text=f'{ctx.author}')
             embed.timestamp = datetime.datetime.utcnow()
             await member.send(embed = embed)
@@ -199,7 +199,7 @@ async def close(ctx, *args):
             if topic:
                 member = ctx.guild.get_member(int(topic))
                 if member:
-                    embed = discord.Embed(title='ModMail Ticket Closed',description = f'`Reason: {close_reason}`', color=16711758)
+                    embed = discord.Embed(title='ModMail Ticket Closed',description = f'`Reason: {close_reason}`', color=65535)
                     embed.set_footer(icon_url= f'{ctx.author.avatar_url}', text=f'{ctx.author}')
                     embed.timestamp = datetime.datetime.utcnow()
                     await member.send(embed = embed)
@@ -209,13 +209,13 @@ async def close(ctx, *args):
 
         else:
             await ctx.message.delete()
-            embed1 = discord.Embed(title='Wrong Channel!', description = '`Please use this Command in the ModMail Category!`', color=16711758)
+            embed1 = discord.Embed(title='Wrong Channel!', description = '`Please use this Command in the ModMail Category!`', color=65535)
             embed1.set_footer(icon_url= f'{ctx.author.avatar_url}', text=f'{ctx.author.name}')
             embed1.timestamp = datetime.datetime.utcnow()
             await ctx.channel.send(embed=embed1, delete_after=3)
     else:
         await ctx.message.cdelete()
-        embed2 = discord.Embed(title='Access Denied', description = '`Required Permissions: Manage_Channels`', color=16711758)
+        embed2 = discord.Embed(title='Access Denied', description = '`Required Permissions: Manage_Channels`', color=65535)
         embed2.set_footer(icon_url= f'{ctx.author.avatar_url}', text=f'{ctx.author.name}')
         embed2.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=embed2, delete_after=2)
@@ -224,5 +224,5 @@ async def close(ctx, *args):
 
 
 
-bot.run('YOUR BOT TOKEN')
+bot.run('ODYxOTY3MjAyNjY3NzI0ODQy.YORfgw.Em61Too-wAEITKxdfQiq-Gf1Z4o')
 
