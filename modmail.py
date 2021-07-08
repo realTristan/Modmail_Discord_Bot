@@ -224,5 +224,5 @@ async def close(ctx, *args):
 
 
 
-bot.run('ODYxOTY3MjAyNjY3NzI0ODQy.YORfgw.Em61Too-wAEITKxdfQiq-Gf1Z4o')
+bot.run('BOT TOKEN')
 
