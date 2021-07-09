@@ -14,7 +14,7 @@ bot = commands.Bot(command_prefix = "!", intents = intents)
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name="DM for Support"))
+    await bot.change_presence(activity=discord.Game(name="DM for Support | s!help"))
     print(f" [!] Launched {bot.user}")
 
 
@@ -42,6 +42,57 @@ async def get_reacts(user, client, message, emojis, timeout=None):
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
+
+
+
+    if message.content.startswith('s!help'):
+        modmail_role1 = utils.get(message.guild.roles, name='[Modmail]')
+
+        if not modmail_role1:
+            modmail_role1 = await message.guild.create_role(name='[Modmail]')
+
+        searched_role1 = get(message.guild.roles, name='[Modmail]')
+        embedx = discord.Embed(title='Snow™ Jr. ModMail Commands', description=f'''
+
+**!send (Server ID) (Message)** **//** *Quickly send a support message to a server*
+
+**!close (Reason)** **//** *Close a support ticket, make sure to include a reason!*
+
+**!add (@User)** **//** *Adds an user to the support ticket channel*
+
+**!remove (@User)** **//** *Removes an user from the support ticket channel*
+
+**!(Message)** **//** *Send a hidden message (only works in server channels)*
+
+***Give the {searched_role1.mention} Role to Grant Access to the Modmail Category!***
+''', color=65535)
+
+        embedx.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
+        embedx.timestamp = datetime.datetime.utcnow()
+        await message.channel.send(embed=embedx)
+        
+    else:
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             
     if message.author.bot:
         return
@@ -85,122 +136,122 @@ async def on_message(message):
         }
 
 
+        if message.content.startswith('!send') == False:
+            embed_select= discord.Embed(title='Select Server to Send Message', description=f'*React with the* ***X*** *to cancel the support request*\n‎‎‏‏‎*You can use* **!send (server id) (message)** *to use quick send!*\n ‎',color=65535)
 
-        embed_select= discord.Embed(title='Select Server to Send Message', description=f'*React with the* ***X*** *to cancel the support request*\n‎‎‏‏‎ ‎',color=65535)
+
+            for guild_check in bot.guilds:
+                if guild_check.get_member(message.author.id) is not None:
+                    ab +=1
+                    guild_dict[f"{ab}"] = f"{guild_check.id}"
+                
+                    emoji= emoji_dict.get(f"{ab}")
+                    embed_select.add_field(name=emoji + ' ' + guild_check.name, value=f'**ID:** {guild_check.id}')
+                else:
+                    pass
 
 
-        for guild_check in bot.guilds:
-            if guild_check.get_member(message.author.id) is not None:
-                ab +=1
-                guild_dict[f"{ab}"] = f"{guild_check.id}"
+
+            msg = await message.author.send(embed=embed_select)
+
             
-                emoji= emoji_dict.get(f"{ab}")
-                embed_select.add_field(name=emoji + ' ' + guild_check.name, value=f'**ID:** {guild_check.id}')
-            else:
-                pass
+
+            if ab == 1:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣"])
+            elif ab == 2:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣"])
+            elif ab == 3:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣"])
+            elif ab == 4:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣"])
+            elif ab == 5:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣"])
+            elif ab == 6:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣"])
+            elif ab == 7:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣"])
+            elif ab == 8:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣'])
+            elif ab == 9:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣','9️⃣'])
+            elif ab >= 10:
+                reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣','9️⃣','🔟'])
 
 
 
-        msg = await message.author.send(embed=embed_select)
-
-        
-
-        if ab == 1:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣"])
-        elif ab == 2:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣"])
-        elif ab == 3:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣"])
-        elif ab == 4:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣"])
-        elif ab == 5:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣"])
-        elif ab == 6:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣"])
-        elif ab == 7:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣"])
-        elif ab == 8:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣'])
-        elif ab == 9:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣','9️⃣'])
-        elif ab >= 10:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣','9️⃣','🔟'])
+            if reaction != '❌':
+                await msg.delete()
+                main_react = react_dict.get(f"{reaction}")
+                guild = bot.get_guild(int(guild_dict.get(f"{main_react}")))
 
 
 
-        if reaction != '❌':
-            await msg.delete()
-            main_react = react_dict.get(f"{reaction}")
-            guild = bot.get_guild(int(guild_dict.get(f"{main_react}")))
+                modmail_role = utils.get(guild.roles, name='[Modmail]')
 
-            modmail_role = utils.get(guild.roles, name='[Modmail]')
+                if not modmail_role:
+                    modmail_role = await guild.create_role(name='[Modmail]')
 
-
-            if not modmail_role:
-                modmail_role = await guild.create_role(name='[Modmail]')
-            
-            modmail_role = utils.get(guild.roles, name='[Modmail]')
+                searched_role = get(guild.roles, name='[Modmail]')
 
 
-            categ = utils.get(guild.categories, name = "modmail")
-            if not categ:
-                overwrites = {
+                categ = utils.get(guild.categories, name = "modmail")
+                if not categ:
+                    overwrites = {
+                        
+                        guild.default_role : discord.PermissionOverwrite(read_messages = False, view_channel = False),
+                        guild.me : discord.PermissionOverwrite(read_messages = True, view_channel = True)
+                    }
+                    categ = await guild.create_category(name = "modmail", overwrites = overwrites)
                     
-                    guild.default_role : discord.PermissionOverwrite(read_messages = False, view_channel = False),
-                    guild.me : discord.PermissionOverwrite(read_messages = True, view_channel = True)
-                }
-                categ = await guild.create_category(name = "modmail", overwrites = overwrites)
-                
-            await categ.set_permissions(modmail_role, read_messages = True, view_channel = True)
+                await categ.set_permissions(modmail_role, read_messages = True, view_channel = True)
 
-            channel = utils.get(categ.channels, topic = str(message.author.id))
-            searched_role = get(guild.roles, name='[Modmail]')
+                channel = utils.get(categ.channels, topic = str(message.author.id))
 
-            if not channel:
-                channel = await categ.create_text_channel(name = f"{message.author}", topic = str(message.author.id))
-                await channel.send(f"||@here||\n**//** `Type a Hidden Message by using !(message)`\n**//** `Add Users to the Ticket by using !add (@user)`\n**//** `Remove Users from the Ticket by using !remove (@user)`\n**//** `Close the Ticket by using !close (reason)`\n **//** `Give an User the @[Modmail] role to Gain Access to this Category`")
-            
-
-            log_chan = utils.get(categ.channels, name = "modmail_logs")
-            if not log_chan:
-                log_chan = await categ.create_text_channel(name = "modmail_logs")
-            
+                if not channel:
+                    channel = await categ.create_text_channel(name = f"{message.author}", topic = str(message.author.id))
+                    await channel.send(f"||@here||\n**//** `Type a Hidden Message by using !(message)`\n**//** `Add Users to the Ticket by using !add (@user)`\n**//** `Remove Users from the Ticket by using !remove (@user)`\n**//** `Close the Ticket by using !close (reason)`\n **//** `Give an User the @[Modmail] role to Gain Access to this Category`")
                 
 
-
-            if message.attachments != empty_arr:
-                files = message.attachments
-
-                for file in files:
-                    embed33 = discord.Embed(title='Message Recieved', description=message.content, color=65535)
-                    embed33.set_thumbnail(url=file.url)
-                    embed33.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
-                    embed33.timestamp = datetime.datetime.utcnow()
-                    await channel.send(embed=embed33)
+                log_chan = utils.get(categ.channels, name = "modmail_logs")
+                if not log_chan:
+                    log_chan = await categ.create_text_channel(name = "modmail_logs")
+                
+                    
 
 
-                    embed332 = discord.Embed(title=f'Message Recieved: #{channel.name}', description=message.content, color=65535)
-                    embed332.set_thumbnail(url=file.url)
-                    embed332.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
-                    embed332.timestamp = datetime.datetime.utcnow()
-                    await log_chan.send(embed=embed332)
+                if message.attachments != empty_arr:
+                    files = message.attachments
+
+                    for file in files:
+                        embed33 = discord.Embed(title='Message Recieved', description=message.content, color=65535)
+                        embed33.set_thumbnail(url=file.url)
+                        embed33.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
+                        embed33.timestamp = datetime.datetime.utcnow()
+                        await channel.send(embed=embed33)
 
 
+                        embed332 = discord.Embed(title=f'Message Recieved: #{channel.name}', description=message.content, color=65535)
+                        embed332.set_thumbnail(url=file.url)
+                        embed332.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
+                        embed332.timestamp = datetime.datetime.utcnow()
+                        await log_chan.send(embed=embed332)
+
+
+                else:
+                    embed3 = discord.Embed(title='Message Recieved',description = message.content, color=65535)
+                    embed3.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
+                    embed3.timestamp = datetime.datetime.utcnow()
+                    await channel.send(embed = embed3)
+
+
+
+                    embed333 = discord.Embed(title=f'Message Recieved: #{channel.name}',description = message.content, color=65535)
+                    embed333.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
+                    embed333.timestamp = datetime.datetime.utcnow()
+                    await log_chan.send(embed=embed333)
+            
             else:
-                embed3 = discord.Embed(title='Message Recieved',description = message.content, color=65535)
-                embed3.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
-                embed3.timestamp = datetime.datetime.utcnow()
-                await channel.send(embed = embed3)
-
-
-
-                embed333 = discord.Embed(title=f'Message Recieved: #{channel.name}',description = message.content, color=65535)
-                embed333.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
-                embed333.timestamp = datetime.datetime.utcnow()
-                await log_chan.send(embed=embed333)
-        
-        else:
-            await msg.delete()
+                await msg.delete()
 
 
 
@@ -241,7 +292,83 @@ async def on_message(message):
                         embed444.set_footer(icon_url= f'{message.author.avatar_url}', text=message.author)
                         embed444.timestamp = datetime.datetime.utcnow()
                         await log_chan.send(embed = embed444)
-    
+
+
+
+@bot.command()
+async def send(ctx, *args):
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        format_args = list(args)
+        guild_id = int(format_args[0])
+        guild = bot.get_guild(int(guild_id))
+
+        modmail_role = utils.get(guild.roles, name='[Modmail]')
+
+
+        if not modmail_role:
+            modmail_role = await guild.create_role(name='[Modmail]')
+        
+        modmail_role = utils.get(guild.roles, name='[Modmail]')
+
+
+        categ = utils.get(guild.categories, name = "modmail")
+        if not categ:
+            overwrites = {
+                
+                guild.default_role : discord.PermissionOverwrite(read_messages = False, view_channel = False),
+                guild.me : discord.PermissionOverwrite(read_messages = True, view_channel = True)
+            }
+            categ = await guild.create_category(name = "modmail", overwrites = overwrites)
+            
+        await categ.set_permissions(modmail_role, read_messages = True, view_channel = True)
+
+
+        channel = utils.get(categ.channels, topic = str(ctx.author.id))
+        if not channel:
+            channel = await categ.create_text_channel(name = f"{ctx.author}", topic = str(ctx.author.id))
+            await channel.send(f"||@here||\n**//** `Type a Hidden Message by using !(message)`\n**//** `Add Users to the Ticket by using !add (@user)`\n**//** `Remove Users from the Ticket by using !remove (@user)`\n**//** `Close the Ticket by using !close (reason)`\n **//** `Give an User the @[Modmail] role to Gain Access to this Category`")
+
+        log_chan = utils.get(categ.channels, name = "modmail_logs")
+        if not log_chan:
+           log_chan = await categ.create_text_channel(name = "modmail_logs")
+
+        message_cont = ' '.join(format_args).replace(str(guild_id),'')
+
+        if ctx.message.attachments != empty_arr:
+            files = ctx.message.attachments
+
+            for file in files:
+                embed33 = discord.Embed(title='Message Recieved', description=message_cont, color=65535)
+                embed33.set_thumbnail(url=file.url)
+                embed33.set_footer(icon_url= f'{ctx.author.avatar_url}', text=ctx.author)
+                embed33.timestamp = datetime.datetime.utcnow()
+                await channel.send(embed=embed33)
+
+
+                embed332 = discord.Embed(title=f'Message Recieved: #{channel.name}', description=message_cont, color=65535)
+                embed332.set_thumbnail(url=file.url)
+                embed332.set_footer(icon_url= f'{ctx.author.avatar_url}', text=ctx.author)
+                embed332.timestamp = datetime.datetime.utcnow()
+                await log_chan.send(embed=embed332)
+
+
+        else:
+            embed3 = discord.Embed(title='Message Recieved',description = message_cont, color=65535)
+            embed3.set_footer(icon_url= f'{ctx.author.avatar_url}', text=ctx.author)
+            embed3.timestamp = datetime.datetime.utcnow()
+            await channel.send(embed = embed3)
+
+
+
+            embed333 = discord.Embed(title=f'Message Recieved: #{channel.name}',description = message_cont, color=65535)
+            embed333.set_footer(icon_url= f'{ctx.author.avatar_url}', text=ctx.author)
+            embed333.timestamp = datetime.datetime.utcnow()
+            await log_chan.send(embed=embed333)
+        
+
+
+
+
 
 
 
