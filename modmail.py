@@ -1,5 +1,6 @@
 from discord.ext import commands
 from discord import utils
+from discord.utils import get,find
 import discord
 import asyncio
 import datetime
@@ -104,12 +105,26 @@ async def on_message(message):
 
         
 
-        if ab > 2:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣','9️⃣','🔟'])
+        if ab == 1:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣"])
         elif ab == 2:
-            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣"])
-        else:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣"])
+        elif ab == 3:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣"])
+        elif ab == 4:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣"])
+        elif ab == 5:
             reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣"])
+        elif ab == 6:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣"])
+        elif ab == 7:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣"])
+        elif ab == 8:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣'])
+        elif ab == 9:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣','9️⃣'])
+        elif ab >= 10:
+            reaction = await get_reacts(message.author, bot, msg, ['❌',"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣",'8️⃣','9️⃣','🔟'])
 
 
 
@@ -118,20 +133,32 @@ async def on_message(message):
             main_react = react_dict.get(f"{reaction}")
             guild = bot.get_guild(int(guild_dict.get(f"{main_react}")))
 
+            modmail_role = utils.get(guild.roles, name='[Modmail]')
+
+
+            if not modmail_role:
+                modmail_role = await guild.create_role(name='[Modmail]')
+            
+            modmail_role = utils.get(guild.roles, name='[Modmail]')
+
 
             categ = utils.get(guild.categories, name = "modmail")
             if not categ:
                 overwrites = {
-                    guild.default_role : discord.PermissionOverwrite(read_messages = False),
-                    guild.me : discord.PermissionOverwrite(read_messages = True)
+                    
+                    guild.default_role : discord.PermissionOverwrite(read_messages = False, view_channel = False),
+                    guild.me : discord.PermissionOverwrite(read_messages = True, view_channel = True)
                 }
                 categ = await guild.create_category(name = "modmail", overwrites = overwrites)
+                
+            await categ.set_permissions(modmail_role, read_messages = True, view_channel = True)
 
             channel = utils.get(categ.channels, topic = str(message.author.id))
+            searched_role = get(guild.roles, name='[Modmail]')
 
             if not channel:
                 channel = await categ.create_text_channel(name = f"{message.author}", topic = str(message.author.id))
-                await channel.send("||@here||\n**//** `Type a Hidden Message by using !(message)`\n**//** `Add Users to the Ticket by using !add (@user)`\n**//** `Remove Users from the Ticket by using !remove (@user)`\n**//** `Close the Ticket by using !close (reason)`")
+                await channel.send(f"||@here||\n**//** `Type a Hidden Message by using !(message)`\n**//** `Add Users to the Ticket by using !add (@user)`\n**//** `Remove Users from the Ticket by using !remove (@user)`\n**//** `Close the Ticket by using !close (reason)`\n **//** `Give an User the @[Modmail] role to Gain Access to this Category`")
             
 
             log_chan = utils.get(categ.channels, name = "modmail_logs")
