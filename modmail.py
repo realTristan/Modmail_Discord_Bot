@@ -298,41 +298,48 @@ async def on_message(message):
 @bot.command()
 async def send(ctx, *args):
     if isinstance(ctx.channel, discord.channel.DMChannel):
-        format_args = list(args)
-        guild_id = int(format_args[0])
-        guild = bot.get_guild(int(guild_id))
+        try:
+            format_args = list(args)
+            guild_id = int(format_args[0])
+            guild = bot.get_guild(int(guild_id))
 
-        modmail_role = utils.get(guild.roles, name='[Modmail]')
-
-
-        if not modmail_role:
-            modmail_role = await guild.create_role(name='[Modmail]')
-        
-        modmail_role = utils.get(guild.roles, name='[Modmail]')
+            modmail_role = utils.get(guild.roles, name='[Modmail]')
 
 
-        categ = utils.get(guild.categories, name = "modmail")
-        if not categ:
-            overwrites = {
-                
-                guild.default_role : discord.PermissionOverwrite(read_messages = False, view_channel = False),
-                guild.me : discord.PermissionOverwrite(read_messages = True, view_channel = True)
-            }
-            categ = await guild.create_category(name = "modmail", overwrites = overwrites)
+            if not modmail_role:
+                modmail_role = await guild.create_role(name='[Modmail]')
             
-        await categ.set_permissions(modmail_role, read_messages = True, view_channel = True)
+            modmail_role = utils.get(guild.roles, name='[Modmail]')
 
 
-        channel = utils.get(categ.channels, topic = str(ctx.author.id))
-        if not channel:
-            channel = await categ.create_text_channel(name = f"{ctx.author}", topic = str(ctx.author.id))
-            await channel.send(f"||@here||\n**//** `Type a Hidden Message by using !(message)`\n**//** `Add Users to the Ticket by using !add (@user)`\n**//** `Remove Users from the Ticket by using !remove (@user)`\n**//** `Close the Ticket by using !close (reason)`\n **//** `Give an User the @[Modmail] role to Gain Access to this Category`")
+            categ = utils.get(guild.categories, name = "modmail")
+            if not categ:
+                overwrites = {
+                    
+                    guild.default_role : discord.PermissionOverwrite(read_messages = False, view_channel = False),
+                    guild.me : discord.PermissionOverwrite(read_messages = True, view_channel = True)
+                }
+                categ = await guild.create_category(name = "modmail", overwrites = overwrites)
+                
+            await categ.set_permissions(modmail_role, read_messages = True, view_channel = True)
 
-        log_chan = utils.get(categ.channels, name = "modmail_logs")
-        if not log_chan:
-           log_chan = await categ.create_text_channel(name = "modmail_logs")
 
-        message_cont = ' '.join(format_args).replace(str(guild_id),'')
+            channel = utils.get(categ.channels, topic = str(ctx.author.id))
+            if not channel:
+                channel = await categ.create_text_channel(name = f"{ctx.author}", topic = str(ctx.author.id))
+                await channel.send(f"||@here||\n**//** `Type a Hidden Message by using !(message)`\n**//** `Add Users to the Ticket by using !add (@user)`\n**//** `Remove Users from the Ticket by using !remove (@user)`\n**//** `Close the Ticket by using !close (reason)`\n **//** `Give an User the @[Modmail] role to Gain Access to this Category`")
+
+            log_chan = utils.get(categ.channels, name = "modmail_logs")
+            if not log_chan:
+                log_chan = await categ.create_text_channel(name = "modmail_logs")
+
+            message_cont = ' '.join(format_args).replace(str(guild_id),'')
+
+        except Exception as e:
+            embed990 = discord.Embed(title=f'ModMail Error!', description=f'`{e}`', color=65535)
+            embed990.set_footer(icon_url= f'{ctx.author.avatar_url}', text=ctx.author)
+            embed990.timestamp = datetime.datetime.utcnow()
+            await ctx.author.send(embed=embed990)
 
         if ctx.message.attachments != empty_arr:
             files = ctx.message.attachments
@@ -351,6 +358,12 @@ async def send(ctx, *args):
                 embed332.timestamp = datetime.datetime.utcnow()
                 await log_chan.send(embed=embed332)
 
+                embed996 = discord.Embed(title=f'Message Sent: [{guild}]', color=65535)
+                embed996.set_thumbnail(url=file.url)
+                embed996.set_footer(icon_url= f'{ctx.author.avatar_url}', text=ctx.author)
+                embed996.timestamp = datetime.datetime.utcnow()
+                await ctx.author.send(embed=embed996, delete_after=2)
+
 
         else:
             embed3 = discord.Embed(title='Message Recieved',description = message_cont, color=65535)
@@ -358,7 +371,10 @@ async def send(ctx, *args):
             embed3.timestamp = datetime.datetime.utcnow()
             await channel.send(embed = embed3)
 
-
+            embed98 = discord.Embed(title=f'Message Sent: [{guild}]', color=65535)
+            embed98.set_footer(icon_url= f'{ctx.author.avatar_url}', text=ctx.author)
+            embed98.timestamp = datetime.datetime.utcnow()
+            await ctx.author.send(embed=embed98, delete_after=2)
 
             embed333 = discord.Embed(title=f'Message Recieved: #{channel.name}',description = message_cont, color=65535)
             embed333.set_footer(icon_url= f'{ctx.author.avatar_url}', text=ctx.author)
