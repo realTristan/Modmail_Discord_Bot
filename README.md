@@ -1,4 +1,4 @@
-# modmail
+# modmail-discord-bot
 // Simple and Easy to use Discord ModMail Bot
 
 - You can select which server to send your message to (like the official modmail bot)
